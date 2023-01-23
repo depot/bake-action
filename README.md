@@ -3,14 +3,17 @@ This action implements the same inputs and outputs as the [`docker/bake-action`]
 
 ### Table of Contents
 
-- [Setup](#setup)
-- [Usage](#usage)
-  - [Authentication](#authentication)
-  - [Differences from `docker/bake-action`](#differences-from-dockerbake-action)
-- [Inputs](#inputs)
-  - [Depot-specific inputs](#depot-specific-inputs)
-  - [General inputs](#general-inputs)
-- [License](#license)
+- [Depot `bake-action` GitHub Action](#depot-bake-action-github-action)
+    - [Table of Contents](#table-of-contents)
+  - [Setup](#setup)
+  - [Usage](#usage)
+    - [Authentication](#authentication)
+    - [Differences from `docker/bake-action`](#differences-from-dockerbake-action)
+  - [Inputs](#inputs)
+    - [Depot-specific inputs](#depot-specific-inputs)
+    - [General inputs](#general-inputs)
+  - [Outputs](#outputs)
+  - [License](#license)
 
 ## Setup
 
@@ -99,8 +102,12 @@ The following inputs can be used as `step.with` keys and match the inputs from [
 | `load`     | Bool     | Load is a shorthand for `--set=*.output=type=docker` (default `false`)                                                                      |
 | `push`     | Bool     | Push is a shorthand for `--set=*.output=type=registry` (default `false`)                                                                    |
 | `set`      | List     | List of [targets values to override](https://docs.docker.com/engine/reference/commandline/buildx_bake/#set) (eg: `targetpattern.key=value`) |
-| `source`   | String   | [Remote bake definition](https://docs.docker.com/build/customize/bake/file-definition/#remote-definition) to build from                     |
 
+## Outputs
+
+| Name       | Type   | Description           |
+| ---------- | ------ | --------------------- |
+| `metadata` | JSON   | Build result metadata |
 
 ## License
 
