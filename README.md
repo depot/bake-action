@@ -1,10 +1,11 @@
 # Depot `bake-action` GitHub Action
+
 This action implements the same inputs and outputs as the [`docker/bake-action`](https://github.com/docker/bake-action), but uses the [`depot` CLI](https://github.com/depot/cli) to execute the build.
 
 ### Table of Contents
 
 - [Depot `bake-action` GitHub Action](#depot-bake-action-github-action)
-    - [Table of Contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Setup](#setup)
   - [Usage](#usage)
     - [Authentication](#authentication)
@@ -82,18 +83,17 @@ This action needs a Depot API token to communicate with your project's builders.
 
 ### Depot-specific inputs
 
-| Name              | Type    | Description                                                                                                                                                                                                                                                         |
-| ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `project`         | String  | Depot [project](https://depot.dev/docs/core-concepts#projects) ID to route the image build to your projects builders (default: the `depot.json` file at the root of your repo)                                                                                      |
-| `token`           | String  | You must authenticate with the Depot API to communicate with your projects builders ([see Authentication above](#authentication))                                                                                                                                   |
-
+| Name      | Type   | Description                                                                                                                                                                    |
+| --------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `project` | String | Depot [project](https://depot.dev/docs/core-concepts#projects) ID to route the image build to your projects builders (default: the `depot.json` file at the root of your repo) |
+| `token`   | String | You must authenticate with the Depot API to communicate with your projects builders ([see Authentication above](#authentication))                                              |
 
 ### General inputs
 
 The following inputs can be used as `step.with` keys and match the inputs from [`docker/bake-action`](https://github.com/docker/bake-action):
 
 | Name       | Type     | Description                                                                                                                                 |
-|------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `files`    | List/CSV | List of [bake definition files](https://docs.docker.com/build/customize/bake/file-definition/)                                              |
 | `workdir`  | String   | Working directory of execution                                                                                                              |
 | `targets`  | List/CSV | List of bake targets (`default` target used if empty)                                                                                       |
@@ -105,9 +105,9 @@ The following inputs can be used as `step.with` keys and match the inputs from [
 
 ## Outputs
 
-| Name       | Type   | Description           |
-| ---------- | ------ | --------------------- |
-| `metadata` | JSON   | Build result metadata |
+| Name       | Type | Description           |
+| ---------- | ---- | --------------------- |
+| `metadata` | JSON | Build result metadata |
 
 ## License
 
