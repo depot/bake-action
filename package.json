@@ -10,8 +10,7 @@
     "@actions/exec": "^1.1.1",
     "@actions/github": "^5.1.1",
     "@actions/http-client": "^2.0.1",
-    "csv-parse": "^5.3.1",
-    "handlebars": "^4.7.7"
+    "csv-parse": "^5.3.1"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
