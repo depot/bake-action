@@ -1,4 +1,4 @@
-name: Build Docker images via Bake with Depot
+name: Depot Bake
 description: GitHub Action to build Docker images via Bake with Depot
 author: Depot
 branding:
