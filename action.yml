@@ -1,0 +1,40 @@
+name: Build Docker images via Bake with Depot
+description: GitHub Action to build Docker images via Bake with Depot
+author: Depot
+branding:
+  icon: package
+  color: gray-dark
+runs:
+  using: node16
+  main: dist/index.js
+  post: dist/index.js
+inputs:
+  files:
+    description: 'List of bake definition files'
+    required: true
+  workdir:
+    description: 'Working directory of bake execution'
+    required: false
+    default: '.'
+  targets:
+    description: 'List of bake targets'
+    required: false
+  no-cache:
+    description: 'Do not use cache when building the image'
+    required: false
+    default: 'false'
+  pull:
+    description: 'Always attempt to pull a newer version of the image'
+    required: false
+    default: 'false'
+  load:
+    description: 'Load is a shorthand for --set=*.output=type=docker'
+    required: false
+    default: 'false'
+  push:
+    description: 'Push is a shorthand for --set=*.output=type=registry'
+    required: false
+    default: 'false'
+  set:
+    description: 'List of targets values to override (eg. targetpattern.key=value)'
+    required: false
