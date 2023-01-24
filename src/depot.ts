@@ -33,6 +33,7 @@ export async function bake(inputs: Inputs) {
   const targets = inputs.targets.length > 0 ? inputs.targets : ['default']
   const bakeArgs = [
     ...flag('--file', inputs.files),
+    ...flag('--workdir', inputs.workdir),
     ...flag('--no-cache', inputs.noCache),
     ...flag('--pull', inputs.pull),
     ...flag('--load', inputs.load),
@@ -65,7 +66,6 @@ export async function bake(inputs: Inputs) {
 
   try {
     await execBake('depot', ['bake', ...args, defaultContext], {
-      cwd: inputs.workdir,
       ignoreReturnCode: true,
       env: {...process.env, ...(token ? {DEPOT_TOKEN: token} : {})},
     })
