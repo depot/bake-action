@@ -22,14 +22,14 @@ export interface Inputs {
 
 export function getInputs(): Inputs {
   return {
-    files: parseCSV('files'),
+    files: parseCSV(core.getInput('files')),
     workdir: core.getInput('workdir') || '.',
-    targets: parseCSV('targets'),
+    targets: parseCSV(core.getInput('targets')),
     noCache: core.getBooleanInput('no-cache'),
     pull: core.getBooleanInput('pull'),
     load: core.getBooleanInput('load'),
     push: core.getBooleanInput('push'),
-    set: parseCSV('set'),
+    set: parseCSV(core.getInput('set')),
     source: core.getInput('source'),
     project: core.getInput('project'),
     token: core.getInput('token') || process.env.DEPOT_TOKEN,
