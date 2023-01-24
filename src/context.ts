@@ -1,6 +1,4 @@
 import * as core from '@actions/core'
-import * as github from '@actions/github'
-import * as crypto from 'crypto'
 import * as csv from 'csv-parse/sync'
 import * as fs from 'fs'
 import * as os from 'os'
@@ -36,22 +34,6 @@ export function getInputs(): Inputs {
   }
 }
 
-let defaultContext: string
-export function getDefaultBuildContext(): string {
-  if (defaultContext) return defaultContext
-  const gitServer = process.env.GITHUB_SERVER_URL || 'https://github.com'
-  const ref = resolveRef()
-  defaultContext = `${gitServer}/${github.context.repo.owner}/${github.context.repo.repo}.git#${ref}`
-  return defaultContext
-}
-
-function resolveRef(): string {
-  let ref = github.context.ref
-  if (github.context.sha && ref && !ref.startsWith('refs/')) ref = `refs/heads/${github.context.ref}`
-  if (github.context.sha && !ref.startsWith(`refs/pull/`)) ref = github.context.sha
-  return ref
-}
-
 let tempDir: string
 export function getTempDir(): string {
   if (tempDir) return tempDir
@@ -59,30 +41,6 @@ export function getTempDir(): string {
   tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'depot-build-push-').split(path.sep).join(path.posix.sep))
   core.saveState('tempDir', tempDir)
   return tempDir
-}
-
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-export function getTempFile(): string {
-  let tries = 0
-  while (tries < 20) {
-    let random
-    try {
-      random = crypto.randomBytes(16)
-    } catch {
-      random = crypto.pseudoRandomBytes(16)
-    }
-
-    const chars = []
-    for (let i = 0; i < 10; i++) {
-      chars.push(alphabet[random.readUInt8(i) % alphabet.length])
-    }
-
-    const filename = path.join(getTempDir(), chars.join(''))
-    if (!fs.existsSync(filename)) return filename
-    tries += 1
-  }
-
-  throw new Error('Unable to generate a temporary file')
 }
 
 export const isPost = !!core.getState('isPost')

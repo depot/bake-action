@@ -29,7 +29,6 @@ async function execBake(cmd: string, args: string[], options: exec.ExecOptions) 
 }
 
 export async function bake(inputs: Inputs) {
-  const defaultContext = context.getDefaultBuildContext()
   const targets = inputs.targets.length > 0 ? inputs.targets : ['default']
   const bakeArgs = [
     ...flag('--file', inputs.files),
@@ -64,7 +63,7 @@ export async function bake(inputs: Inputs) {
   }
 
   try {
-    await execBake('depot', ['bake', ...args, defaultContext], {
+    await execBake('depot', ['bake', ...args], {
       cwd: inputs.workdir,
       ignoreReturnCode: true,
       env: {...process.env, ...(token ? {DEPOT_TOKEN: token} : {})},
