@@ -38,3 +38,7 @@ inputs:
   set:
     description: 'List of targets values to override (eg. targetpattern.key=value)'
     required: false
+  buildx-fallback:
+    description: 'Fallback to `docker buildx bake` if `depot bake` fails'
+    required: false
+    default: 'false'

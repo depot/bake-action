@@ -69,7 +69,12 @@ export async function bake(inputs: Inputs) {
       env: {...process.env, ...(token ? {DEPOT_TOKEN: token} : {})},
     })
   } catch (err) {
-    throw err
+    if (inputs.buildxFallback) {
+      core.warning(`falling back to buildx: ${err}`)
+      await execBake('docker', ['buildx', 'bake', ...bakeArgs, ...targets], {ignoreReturnCode: true})
+    } else {
+      throw err
+    }
   }
 }
 
