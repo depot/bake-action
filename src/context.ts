@@ -16,6 +16,7 @@ export interface Inputs {
   source: string
   project: string
   token?: string
+  buildxFallback: boolean
 }
 
 export function getInputs(): Inputs {
@@ -31,6 +32,7 @@ export function getInputs(): Inputs {
     source: core.getInput('source'),
     project: core.getInput('project'),
     token: core.getInput('token') || process.env.DEPOT_TOKEN,
+    buildxFallback: core.getBooleanInput('buildx-fallback'),
   }
 }
 
