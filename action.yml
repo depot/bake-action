@@ -9,26 +9,26 @@ runs:
   main: dist/index.js
   post: dist/index.js
 inputs:
+  buildx-fallback:
+    description: 'Fallback to `docker buildx bake` if `depot bake` fails'
+    required: false
+    default: 'false'
   files:
     description: 'List of bake definition files'
-    required: true
-  workdir:
-    description: 'Working directory of bake execution'
     required: false
-    default: '.'
-  targets:
-    description: 'List of bake targets'
+  load:
+    description: 'Load is a shorthand for --set=*.output=type=docker'
     required: false
+    default: 'false'
   no-cache:
     description: 'Do not use cache when building the image'
     required: false
     default: 'false'
+  project:
+    description: 'Depot project ID'
+    required: false
   pull:
     description: 'Always attempt to pull a newer version of the image'
-    required: false
-    default: 'false'
-  load:
-    description: 'Load is a shorthand for --set=*.output=type=docker'
     required: false
     default: 'false'
   push:
@@ -38,7 +38,13 @@ inputs:
   set:
     description: 'List of targets values to override (eg. targetpattern.key=value)'
     required: false
-  buildx-fallback:
-    description: 'Fallback to `docker buildx bake` if `depot bake` fails'
+  targets:
+    description: 'List of bake targets'
     required: false
-    default: 'false'
+  token:
+    description: 'Depot Token used to authenticate with the remote builder instance'
+    required: false
+  workdir:
+    description: 'Working directory of bake execution'
+    required: false
+    default: '.'
