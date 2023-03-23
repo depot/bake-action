@@ -1,6 +1,8 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as http from '@actions/http-client'
+import * as io from '@actions/io'
+import {execa} from 'execa'
 import * as fs from 'fs'
 import * as path from 'path'
 import type {Inputs} from './context'
@@ -22,9 +24,28 @@ export async function version() {
 }
 
 async function execBake(cmd: string, args: string[], options: exec.ExecOptions) {
-  const res = await exec.getExecOutput(cmd, args, options)
-  if (res.stderr.length > 0 && res.exitCode != 0) {
-    throw new Error(`failed with: ${res.stderr.match(/(.*)\s*$/)?.[0]?.trim() ?? 'unknown error'}`)
+  const resolved = await io.which(cmd, true)
+  console.log(`[command]${resolved} ${args.join(' ')}`)
+  const proc = execa(resolved, args, {...options, reject: false, stdin: 'inherit', stdout: 'pipe', stderr: 'pipe'})
+
+  if (proc.pipeStdout) proc.pipeStdout(process.stdout)
+  if (proc.pipeStderr) proc.pipeStderr(process.stdout)
+
+  function signalHandler(signal: NodeJS.Signals) {
+    proc.kill(signal)
+  }
+
+  process.on('SIGINT', signalHandler)
+  process.on('SIGTERM', signalHandler)
+
+  try {
+    const res = await proc
+    if (res.stderr.length > 0 && res.exitCode != 0) {
+      throw new Error(`failed with: ${res.stderr.match(/(.*)\s*$/)?.[0]?.trim() ?? 'unknown error'}`)
+    }
+  } finally {
+    process.off('SIGINT', signalHandler)
+    process.off('SIGTERM', signalHandler)
   }
 }
 
