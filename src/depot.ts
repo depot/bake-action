@@ -23,7 +23,7 @@ export async function version() {
   await exec.exec('depot', ['version'], {failOnStdErr: false})
 }
 
-async function execBake(cmd: string, args: string[], options: exec.ExecOptions) {
+async function execBake(cmd: string, args: string[], options?: exec.ExecOptions) {
   const resolved = await io.which(cmd, true)
   console.log(`[command]${resolved} ${args.join(' ')}`)
   const proc = execa(resolved, args, {...options, reject: false, stdin: 'inherit', stdout: 'pipe', stderr: 'pipe'})
@@ -86,13 +86,12 @@ export async function bake(inputs: Inputs) {
   try {
     await execBake('depot', ['bake', ...args], {
       cwd: inputs.workdir,
-      ignoreReturnCode: true,
       env: {...process.env, ...(token ? {DEPOT_TOKEN: token} : {})},
     })
   } catch (err) {
     if (inputs.buildxFallback) {
       core.warning(`falling back to buildx: ${err}`)
-      await execBake('docker', ['buildx', 'bake', ...bakeArgs, ...targets], {ignoreReturnCode: true})
+      await execBake('docker', ['buildx', 'bake', ...bakeArgs, ...targets])
     } else {
       throw err
     }
