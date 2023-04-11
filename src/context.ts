@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import * as github from '@actions/github'
 import * as csv from 'csv-parse/sync'
 import * as fs from 'fs'
 import * as os from 'os'
@@ -11,7 +12,9 @@ export interface Inputs {
   noCache: boolean
   pull: boolean
   load: boolean
+  provenance: string
   push: boolean
+  sbom: string
   set: string[]
   source: string
   project: string
@@ -27,7 +30,9 @@ export function getInputs(): Inputs {
     noCache: core.getBooleanInput('no-cache'),
     pull: core.getBooleanInput('pull'),
     load: core.getBooleanInput('load'),
+    provenance: getProvenanceInput(),
     push: core.getBooleanInput('push'),
+    sbom: core.getInput('sbom'),
     set: parseCSV(core.getInput('set')),
     source: core.getInput('source'),
     project: core.getInput('project'),
@@ -66,4 +71,42 @@ function parseCSV(source: string): string[] {
     .flatMap((i) => i)
     .map((i) => i.trim())
     .filter((i) => i)
+}
+
+function getProvenanceInput(): string {
+  const input = core.getInput('provenance')
+  if (!input) return input
+
+  try {
+    return core.getBooleanInput('provenance') ? `builder-id=${provenanceBuilderID()}` : 'false'
+  } catch {
+    return resolveProvenanceAttrs(input)
+  }
+}
+
+export function resolveProvenanceAttrs(input: string): string {
+  // parse attributes from input
+  const fields: string[][] = csv.parse(input, {
+    relaxColumnCount: true,
+    skipEmptyLines: true,
+  })[0]
+
+  // check if builder-id attribute exists in the input
+  for (const field of fields) {
+    const parts = field
+      .toString()
+      .split(/(?<=^[^=]+?)=/)
+      .map((item) => item.trim())
+    if (parts[0] == 'builder-id') {
+      return input
+    }
+  }
+
+  // if not add builder-id attribute
+  return `${input},builder-id=${provenanceBuilderID()}`
+}
+
+function provenanceBuilderID(): string {
+  const serverURL = process.env.GITHUB_SERVER_URL || 'https://github.com'
+  return `${serverURL}/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}`
 }
