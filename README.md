@@ -92,16 +92,18 @@ This action needs a Depot API token to communicate with your project's builders.
 
 The following inputs can be used as `step.with` keys and match the inputs from [`docker/bake-action`](https://github.com/docker/bake-action):
 
-| Name       | Type     | Description                                                                                                                                 |
-| ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `files`    | List/CSV | List of [bake definition files](https://docs.docker.com/build/customize/bake/file-definition/)                                              |
-| `workdir`  | String   | Working directory of execution                                                                                                              |
-| `targets`  | List/CSV | List of bake targets (`default` target used if empty)                                                                                       |
-| `no-cache` | Bool     | Do not use cache when building the image (default `false`)                                                                                  |
-| `pull`     | Bool     | Always attempt to pull a newer version of the image (default `false`)                                                                       |
-| `load`     | Bool     | Load is a shorthand for `--set=*.output=type=docker` (default `false`)                                                                      |
-| `push`     | Bool     | Push is a shorthand for `--set=*.output=type=registry` (default `false`)                                                                    |
-| `set`      | List     | List of [targets values to override](https://docs.docker.com/engine/reference/commandline/buildx_bake/#set) (eg: `targetpattern.key=value`) |
+| Name         | Type        | Description                                                                                                                                 |
+| ------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `files`      | List/CSV    | List of [bake definition files](https://docs.docker.com/build/customize/bake/file-definition/)                                              |
+| `workdir`    | String      | Working directory of execution                                                                                                              |
+| `targets`    | List/CSV    | List of bake targets (`default` target used if empty)                                                                                       |
+| `no-cache`   | Bool        | Do not use cache when building the image (default `false`)                                                                                  |
+| `pull`       | Bool        | Always attempt to pull a newer version of the image (default `false`)                                                                       |
+| `load`       | Bool        | Load is a shorthand for `--set=*.output=type=docker` (default `false`)                                                                      |
+| `provenance` | Bool/String | [Provenance](https://docs.docker.com/build/attestations/provenance/) is a shorthand for `--set=*.attest=type=provenance`                    |
+| `push`       | Bool        | Push is a shorthand for `--set=*.output=type=registry` (default `false`)                                                                    |
+| `sbom`       | Bool/String | [SBOM](https://docs.docker.com/build/attestations/sbom/) is a shorthand for `--set=*.attest=type=sbom`                                      |
+| `set`        | List        | List of [targets values to override](https://docs.docker.com/engine/reference/commandline/buildx_bake/#set) (eg: `targetpattern.key=value`) |
 
 ## Outputs
 

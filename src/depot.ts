@@ -1,7 +1,11 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
+import * as github from '@actions/github'
 import * as http from '@actions/http-client'
 import * as io from '@actions/io'
+import {Bake} from '@docker/actions-toolkit/lib/buildx/bake'
+import {Inputs as BuildxInputs} from '@docker/actions-toolkit/lib/buildx/inputs'
+import {Toolkit} from '@docker/actions-toolkit/lib/toolkit'
 import {execa} from 'execa'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -57,11 +61,31 @@ export async function bake(inputs: Inputs) {
     ...flag('--pull', inputs.pull),
     ...flag('--load', inputs.load),
     ...flag('--push', inputs.push),
+    ...flag('--sbom', inputs.sbom),
     ...flag('--set', inputs.set),
     ...flag('--push', inputs.push),
     ...flag('--set', inputs.set),
     ...flag('--metadata-file', getMetadataFile()),
   ]
+
+  const toolkit = new Toolkit()
+  const bakedef = await toolkit.bake.parseDefinitions([...inputs.files, inputs.source], inputs.targets, inputs.workdir)
+  if (inputs.provenance) {
+    bakeArgs.push('--provenance', inputs.provenance)
+  } else if (!Bake.hasDockerExporter(bakedef, inputs.load)) {
+    // if provenance not specified and BuildKit version compatible for
+    // attestation, set default provenance. Also needs to make sure user
+    // doesn't want to explicitly load the image to docker.
+    if (github.context.payload.repository?.private ?? false) {
+      // if this is a private repository, we set the default provenance
+      // attributes being set in buildx: https://github.com/docker/buildx/blob/fb27e3f919dcbf614d7126b10c2bc2d0b1927eb6/build/build.go#L603
+      bakeArgs.push('--provenance', BuildxInputs.resolveProvenanceAttrs(`mode=min,inline-only=true`))
+    } else {
+      // for a public repository, we set max provenance mode.
+      bakeArgs.push('--provenance', BuildxInputs.resolveProvenanceAttrs(`mode=max`))
+    }
+  }
+
   const depotArgs = [...flag('--project', inputs.project)]
   const args = [...bakeArgs, ...depotArgs, ...targets]
 
