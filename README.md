@@ -83,10 +83,11 @@ This action needs a Depot API token to communicate with your project's builders.
 
 ### Depot-specific inputs
 
-| Name      | Type   | Description                                                                                                                                                                    |
-| --------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `project` | String | Depot [project](https://depot.dev/docs/core-concepts#projects) ID to route the image build to your projects builders (default: the `depot.json` file at the root of your repo) |
-| `token`   | String | You must authenticate with the Depot API to communicate with your projects builders ([see Authentication above](#authentication))                                              |
+| Name             | Type   | Description                                                                                                                                                                    |
+| ---------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `project`        | String | Depot [project](https://depot.dev/docs/core-concepts#projects) ID to route the image build to your projects builders (default: the `depot.json` file at the root of your repo) |
+| `token`          | String | You must authenticate with the Depot API to communicate with your projects builders ([see Authentication above](#authentication))                                              |
+| `build-platform` | String | The platform to use for the build ( `linux/amd64` or `linux/arm64`)                                                                                                            |
 
 ### General inputs
 

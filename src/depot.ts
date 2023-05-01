@@ -86,7 +86,7 @@ export async function bake(inputs: Inputs) {
     }
   }
 
-  const depotArgs = [...flag('--project', inputs.project)]
+  const depotArgs = [...flag('--project', inputs.project), ...flag('--build-platform', inputs.buildPlatform)]
   const args = [...bakeArgs, ...depotArgs, ...targets]
 
   // Attempt to exchange GitHub Actions OIDC token for temporary Depot trust relationship token
