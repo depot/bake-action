@@ -9,6 +9,9 @@ runs:
   main: dist/index.js
   post: dist/index.js
 inputs:
+  build-platform:
+    description: 'The platform to use for the build'
+    required: false
   buildx-fallback:
     description: 'Fallback to `docker buildx bake` if `depot bake` fails'
     required: false
