@@ -69,7 +69,14 @@ export async function bake(inputs: Inputs) {
   ]
 
   const toolkit = new Toolkit()
-  const bakedef = await toolkit.bake.parseDefinitions([...inputs.files, inputs.source], inputs.targets, inputs.workdir)
+  const bakedef = await toolkit.bake.parseDefinitions(
+    [...inputs.files, inputs.source],
+    inputs.targets,
+    inputs.set,
+    inputs.load,
+    inputs.push,
+    inputs.workdir,
+  )
   if (inputs.provenance) {
     bakeArgs.push('--provenance', inputs.provenance)
   } else if (!Bake.hasDockerExporter(bakedef, inputs.load)) {
