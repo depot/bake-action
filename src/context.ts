@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import {Util} from '@docker/actions-toolkit/lib/util'
 import * as csv from 'csv-parse/sync'
 import * as fs from 'fs'
 import * as os from 'os'
@@ -34,7 +35,7 @@ export function getInputs(): Inputs {
     provenance: getProvenanceInput(),
     push: core.getBooleanInput('push'),
     sbom: core.getInput('sbom'),
-    set: parseCSV(core.getInput('set')),
+    set: Util.getInputList('set', {ignoreComma: true, quote: false}),
     source: core.getInput('source'),
     project: core.getInput('project'),
     token: core.getInput('token') || process.env.DEPOT_TOKEN,
