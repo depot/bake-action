@@ -34,7 +34,7 @@ export function getInputs(): Inputs {
     noCache: core.getBooleanInput('no-cache'),
     pull: core.getBooleanInput('pull'),
     lint: core.getBooleanInput('lint'),
-    lintFailOn: core.getInput('lint-fail-on') || 'error',
+    lintFailOn: core.getInput('lint-fail-on'),
     load: core.getBooleanInput('load'),
     provenance: getProvenanceInput(),
     push: core.getBooleanInput('push'),
