@@ -12,6 +12,8 @@ export interface Inputs {
   targets: string[]
   noCache: boolean
   pull: boolean
+  lint: boolean
+  lintFailOn: string
   load: boolean
   provenance: string
   push: boolean
@@ -31,6 +33,8 @@ export function getInputs(): Inputs {
     targets: parseCSV(core.getInput('targets')),
     noCache: core.getBooleanInput('no-cache'),
     pull: core.getBooleanInput('pull'),
+    lint: core.getBooleanInput('lint'),
+    lintFailOn: core.getInput('lint-fail-on'),
     load: core.getBooleanInput('load'),
     provenance: getProvenanceInput(),
     push: core.getBooleanInput('push'),
