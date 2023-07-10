@@ -125,7 +125,8 @@ export async function bake(inputs: Inputs) {
       env: {...process.env, ...(token ? {DEPOT_TOKEN: token} : {})},
     })
   } catch (err) {
-    if (inputs.buildxFallback) {
+    const lintFailed = inputs.lint && (err as Error).message?.includes('linting failed')
+    if (inputs.buildxFallback && !lintFailed) {
       core.warning(`falling back to buildx: ${err}`)
       await execBake('docker', ['buildx', 'bake', ...bakeArgs, ...targets])
     } else {
