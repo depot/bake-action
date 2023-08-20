@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "node build.cjs",
@@ -10,20 +11,31 @@
     "@actions/core": "^1.10.0",
     "@actions/exec": "^1.1.1",
     "@actions/github": "^5.1.1",
-    "@actions/http-client": "^2.1.0",
+    "@actions/http-client": "^2.1.1",
     "@actions/io": "^1.1.3",
     "@depot/actions-public-oidc-client": "^1.0.0",
-    "@docker/actions-toolkit": "^0.2.0",
-    "csv-parse": "^5.3.6",
-    "execa": "^7.1.1"
+    "@docker/actions-toolkit": "^0.8.0",
+    "csv-parse": "^5.4.0",
+    "execa": "^8.0.1"
   },
   "devDependencies": {
-    "@tsconfig/node16": "^1.0.3",
-    "@types/node": "~18.15.5",
-    "esbuild": "^0.17.12",
-    "prettier": "^2.8.6",
-    "prettier-plugin-organize-imports": "^3.1.1",
-    "prettier-plugin-pkg": "^0.17.1",
-    "typescript": "^4.8.4"
+    "@tsconfig/node16": "^16.1.0",
+    "@types/node": "~20.5.1",
+    "esbuild": "^0.19.2",
+    "prettier": "^3.0.2",
+    "prettier-plugin-organize-imports": "^3.2.3",
+    "prettier-plugin-pkg": "^0.18.0",
+    "typescript": "^5.1.6"
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "printWidth": 120,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "plugins": [
+      "prettier-plugin-pkg",
+      "prettier-plugin-organize-imports"
+    ]
   }
 }
