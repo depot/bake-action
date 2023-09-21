@@ -63,6 +63,7 @@ export async function bake(inputs: Inputs) {
     ...flag('--load', inputs.load),
     ...flag('--push', inputs.push),
     ...flag('--sbom', inputs.sbom),
+    ...flag('--sbom-dir', inputs.sbomDir),
     ...flag('--set', inputs.set),
     ...flag('--push', inputs.push),
     ...flag('--set', inputs.set),

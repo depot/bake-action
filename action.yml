@@ -51,6 +51,9 @@ inputs:
   sbom:
     description: 'SBOM is a shorthand for --set=*.attest=type=sbom'
     required: false
+  sbom-dir:
+    description: 'Directory to output SBOMs for each built image'
+    required: false
   set:
     description: 'List of targets values to override (eg. targetpattern.key=value)'
     required: false

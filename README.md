@@ -106,6 +106,7 @@ The following inputs can be used as `step.with` keys and match the inputs from [
 | `provenance` | Bool/String | [Provenance](https://docs.docker.com/build/attestations/provenance/) is a shorthand for `--set=*.attest=type=provenance`                    |
 | `push`       | Bool        | Push is a shorthand for `--set=*.output=type=registry` (default `false`)                                                                    |
 | `sbom`       | Bool/String | [SBOM](https://docs.docker.com/build/attestations/sbom/) is a shorthand for `--set=*.attest=type=sbom`                                      |
+| `sbom-dir`   | String      | Save all image [SBOM](https://docs.docker.com/build/attestations/sbom/) to this output directory                                            |
 | `set`        | List        | List of [targets values to override](https://docs.docker.com/engine/reference/commandline/buildx_bake/#set) (eg: `targetpattern.key=value`) |
 
 ## Outputs
