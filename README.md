@@ -83,13 +83,14 @@ This action needs a Depot API token to communicate with your project's builders.
 
 ### Depot-specific inputs
 
-| Name             | Type   | Description                                                                                                                                                                    |
-| ---------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `project`        | String | Depot [project](https://depot.dev/docs/core-concepts#projects) ID to route the image build to your projects builders (default: the `depot.json` file at the root of your repo) |
-| `token`          | String | You must authenticate with the Depot API to communicate with your projects builders ([see Authentication above](#authentication))                                              |
-| `build-platform` | String | The platform to use for the build ( `linux/amd64` or `linux/arm64`)                                                                                                            |
-| `lint`           | Bool   | Lint dockerfiles and fail build if any issues are of `error` severity. (default `false`)                                                                                       |
-| `lint-fail-on`   | String | Severity of linter issue to cause the build to fail. (`error`, `warn`, `info`, `none`)                                                                                         |
+| Name             | Type    | Description                                                                                                                                                                    |
+| ---------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `project`        | String  | Depot [project](https://depot.dev/docs/core-concepts#projects) ID to route the image build to your projects builders (default: the `depot.json` file at the root of your repo) |
+| `token`          | String  | You must authenticate with the Depot API to communicate with your projects builders ([see Authentication above](#authentication))                                              |
+| `build-platform` | String  | The platform to use for the build ( `linux/amd64` or `linux/arm64`)                                                                                                            |
+| `lint`           | Bool    | Lint dockerfiles and fail build if any issues are of `error` severity. (default `false`)                                                                                       |
+| `lint-fail-on`   | String  | Severity of linter issue to cause the build to fail. (`error`, `warn`, `info`, `none`)                                                                                         |
+| `save`           | Boolean | Save the image to the Depot ephemeral registry (for use with the [depot/pull-action](https://github.com/depot/pull-action))                                                    |
 
 ### General inputs
 
@@ -111,9 +112,12 @@ The following inputs can be used as `step.with` keys and match the inputs from [
 
 ## Outputs
 
-| Name       | Type | Description           |
-| ---------- | ---- | --------------------- |
-| `metadata` | JSON | Build result metadata |
+| Name         | Type   | Description           |
+| ------------ | ------ | --------------------- |
+| `metadata`   | JSON   | Build result metadata |
+| `project-id` | String | Depot Project ID      |
+| `build-id`   | String | Depot Build ID        |
+| `targets`    | Array  | Saved Bake Targets    |
 
 ## License
 

@@ -48,6 +48,10 @@ inputs:
     description: 'Push is a shorthand for --set=*.output=type=registry'
     required: false
     default: 'false'
+  save:
+    description: 'Save the image to the Depot ephemeral registry'
+    required: false
+    default: 'false'
   sbom:
     description: 'SBOM is a shorthand for --set=*.attest=type=sbom'
     required: false
