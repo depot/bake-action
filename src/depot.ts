@@ -100,6 +100,7 @@ export async function bake(inputs: Inputs) {
     ...flag('--build-platform', inputs.buildPlatform),
     ...flag('--lint', inputs.lint),
     ...flag('--lint-fail-on', inputs.lintFailOn),
+    ...flag('--save', inputs.save),
   ]
   const args = [...bakeArgs, ...depotArgs, ...targets]
 

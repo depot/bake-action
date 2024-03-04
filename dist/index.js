@@ -74336,6 +74336,7 @@ function getInputs() {
     load: core.getBooleanInput("load"),
     provenance: getProvenanceInput(),
     push: core.getBooleanInput("push"),
+    save: core.getBooleanInput("save"),
     sbom: core.getInput("sbom"),
     sbomDir: core.getInput("sbom-dir"),
     set: import_util.Util.getInputList("set", { ignoreComma: true, quote: false }),
@@ -76065,7 +76066,8 @@ async function bake(inputs) {
     ...flag("--project", inputs.project),
     ...flag("--build-platform", inputs.buildPlatform),
     ...flag("--lint", inputs.lint),
-    ...flag("--lint-fail-on", inputs.lintFailOn)
+    ...flag("--lint-fail-on", inputs.lintFailOn),
+    ...flag("--save", inputs.save)
   ];
   const args = [...bakeArgs, ...depotArgs, ...targets];
   let token = inputs.token ?? process.env.DEPOT_TOKEN;
@@ -76149,8 +76151,22 @@ async function main() {
   const metadata = getMetadata();
   if (metadata) {
     await core3.group(`Metadata`, async () => {
+      var _a, _b, _c;
       core3.info(metadata);
       core3.setOutput("metadata", metadata);
+      try {
+        const parsed = JSON.parse(metadata);
+        if ((_a = parsed == null ? void 0 : parsed["depot.build"]) == null ? void 0 : _a.buildID) {
+          core3.setOutput("build-id", parsed["depot.build"].buildID);
+        }
+        if ((_b = parsed == null ? void 0 : parsed["depot.build"]) == null ? void 0 : _b.projectID) {
+          core3.setOutput("project-id", parsed["depot.build"].projectID);
+        }
+        if ((_c = parsed == null ? void 0 : parsed["depot.build"]) == null ? void 0 : _c.targets) {
+          core3.setOutput("targets", parsed["depot.build"].targets);
+        }
+      } catch {
+      }
     });
   }
 }
