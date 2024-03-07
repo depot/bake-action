@@ -76151,7 +76151,7 @@ async function main() {
   const metadata = getMetadata();
   if (metadata) {
     await core3.group(`Metadata`, async () => {
-      var _a, _b, _c;
+      var _a, _b;
       core3.info(metadata);
       core3.setOutput("metadata", metadata);
       try {
@@ -76161,9 +76161,6 @@ async function main() {
         }
         if ((_b = parsed == null ? void 0 : parsed["depot.build"]) == null ? void 0 : _b.projectID) {
           core3.setOutput("project-id", parsed["depot.build"].projectID);
-        }
-        if ((_c = parsed == null ? void 0 : parsed["depot.build"]) == null ? void 0 : _c.targets) {
-          core3.setOutput("targets", parsed["depot.build"].targets);
         }
       } catch {
       }

@@ -32,9 +32,6 @@ async function main() {
         if (parsed?.['depot.build']?.projectID) {
           core.setOutput('project-id', parsed['depot.build'].projectID)
         }
-        if (parsed?.['depot.build']?.targets) {
-          core.setOutput('targets', parsed['depot.build'].targets)
-        }
       } catch {}
     })
   }
