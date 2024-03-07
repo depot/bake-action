@@ -117,7 +117,6 @@ The following inputs can be used as `step.with` keys and match the inputs from [
 | `metadata`   | JSON   | Build result metadata |
 | `project-id` | String | Depot Project ID      |
 | `build-id`   | String | Depot Build ID        |
-| `targets`    | Array  | Saved Bake Targets    |
 
 ## License
 
