@@ -2,12 +2,11 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as github from '@actions/github'
 import * as http from '@actions/http-client'
-import * as io from '@actions/io'
 import * as publicOIDC from '@depot/actions-public-oidc-client'
 import {Bake} from '@docker/actions-toolkit/lib/buildx/bake'
-import {Inputs as BuildxInputs} from '@docker/actions-toolkit/lib/buildx/inputs'
+import {Build} from '@docker/actions-toolkit/lib/buildx/build'
+import {Exec} from '@docker/actions-toolkit/lib/exec'
 import {Toolkit} from '@docker/actions-toolkit/lib/toolkit'
-import {execa} from 'execa'
 import * as fs from 'fs'
 import * as path from 'path'
 import type {Inputs} from './context'
@@ -28,33 +27,8 @@ export async function version() {
   await exec.exec('depot', ['version'], {failOnStdErr: false})
 }
 
-async function execBake(cmd: string, args: string[], options?: exec.ExecOptions) {
-  const resolved = await io.which(cmd, true)
-  console.log(`[command]${resolved} ${args.join(' ')}`)
-  const proc = execa(resolved, args, {...options, reject: false, stdin: 'inherit', stdout: 'pipe', stderr: 'pipe'})
-
-  if (proc.pipeStdout) proc.pipeStdout(process.stdout)
-  if (proc.pipeStderr) proc.pipeStderr(process.stdout)
-
-  function signalHandler(signal: NodeJS.Signals) {
-    proc.kill(signal)
-  }
-
-  process.on('SIGINT', signalHandler)
-  process.on('SIGTERM', signalHandler)
-
-  try {
-    const res = await proc
-    if (res.stderr.length > 0 && res.exitCode != 0) {
-      throw new Error(`failed with: ${res.stderr.match(/(.*)\s*$/)?.[0]?.trim() ?? 'unknown error'}`)
-    }
-  } finally {
-    process.off('SIGINT', signalHandler)
-    process.off('SIGTERM', signalHandler)
-  }
-}
-
 export async function bake(inputs: Inputs) {
+  const gitAuthToken = process.env.BUILDX_BAKE_GIT_AUTH_TOKEN ?? inputs.githubToken
   const targets = inputs.targets.length > 0 ? inputs.targets : ['default']
   const bakeArgs = [
     ...flag('--file', inputs.files),
@@ -71,13 +45,20 @@ export async function bake(inputs: Inputs) {
   ]
 
   const toolkit = new Toolkit()
-  const bakedef = await toolkit.bake.parseDefinitions(
-    [...inputs.files, inputs.source],
-    inputs.targets,
-    inputs.set,
-    inputs.load,
-    inputs.push,
-    inputs.workdir,
+  const bakedef = await toolkit.buildxBake.getDefinition(
+    {
+      files: inputs.files,
+      load: inputs.load,
+      noCache: inputs.noCache,
+      overrides: inputs.set,
+      provenance: inputs.provenance,
+      push: inputs.push,
+      sbom: inputs.sbom,
+      source: inputs.source,
+      targets: inputs.targets,
+      githubToken: gitAuthToken,
+    },
+    {cwd: inputs.workdir},
   )
   if (inputs.provenance) {
     bakeArgs.push('--provenance', inputs.provenance)
@@ -88,10 +69,10 @@ export async function bake(inputs: Inputs) {
     if (github.context.payload.repository?.private ?? false) {
       // if this is a private repository, we set the default provenance
       // attributes being set in buildx: https://github.com/docker/buildx/blob/fb27e3f919dcbf614d7126b10c2bc2d0b1927eb6/build/build.go#L603
-      bakeArgs.push('--provenance', BuildxInputs.resolveProvenanceAttrs(`mode=min,inline-only=true`))
+      bakeArgs.push('--provenance', Build.resolveProvenanceAttrs(`mode=min,inline-only=true`))
     } else {
       // for a public repository, we set max provenance mode.
-      bakeArgs.push('--provenance', BuildxInputs.resolveProvenanceAttrs(`mode=max`))
+      bakeArgs.push('--provenance', Build.resolveProvenanceAttrs(`mode=max`))
     }
   }
 
@@ -140,16 +121,30 @@ export async function bake(inputs: Inputs) {
     }
   }
 
+  const buildEnv: Record<string, string> = {
+    ...process.env,
+    BUILDX_BAKE_GIT_AUTH_TOKEN: gitAuthToken,
+    ...(token ? {DEPOT_TOKEN: token} : {}),
+  }
+
   try {
-    await execBake('depot', ['bake', ...args], {
+    await Exec.getExecOutput('depot', ['bake', ...args], {
       cwd: inputs.workdir,
-      env: {...process.env, ...(token ? {DEPOT_TOKEN: token} : {})},
+      env: buildEnv,
+      ignoreReturnCode: true,
+    }).then((res) => {
+      if (res.stderr.length > 0 && res.exitCode != 0) {
+        throw new Error(`buildx bake failed with: ${res.stderr.match(/(.*)\s*$/)?.[0]?.trim() ?? 'unknown error'}`)
+      }
     })
   } catch (err) {
     const lintFailed = inputs.lint && (err as Error).message?.includes('linting failed')
     if (inputs.buildxFallback && !lintFailed) {
       core.warning(`falling back to buildx: ${err}`)
-      await execBake('docker', ['buildx', 'bake', ...bakeArgs, ...targets])
+      await Exec.getExecOutput('docker', ['buildx', 'bake', ...bakeArgs, ...targets], {
+        cwd: inputs.workdir,
+        env: buildEnv,
+      })
     } else {
       throw err
     }

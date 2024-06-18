@@ -4,11 +4,58 @@ author: Depot
 branding:
   icon: package
   color: gray-dark
+
 runs:
   using: node20
   main: dist/index.js
   post: dist/index.js
+
 inputs:
+  # upstream inputs
+  source:
+    description: 'Context to build from. Can be either local or a remote bake definition'
+    required: false
+  files:
+    description: 'List of bake definition files'
+    required: false
+  workdir:
+    description: 'Working directory of bake execution'
+    required: false
+    default: '.'
+  targets:
+    description: 'List of bake targets'
+    required: false
+  no-cache:
+    description: 'Do not use cache when building the image'
+    required: false
+    default: 'false'
+  pull:
+    description: 'Always attempt to pull a newer version of the image'
+    required: false
+    default: 'false'
+  load:
+    description: 'Load is a shorthand for --set=*.output=type=docker'
+    required: false
+    default: 'false'
+  provenance:
+    description: 'Provenance is a shorthand for --set=*.attest=type=provenance'
+    required: false
+  push:
+    description: 'Push is a shorthand for --set=*.output=type=registry'
+    required: false
+    default: 'false'
+  sbom:
+    description: 'SBOM is a shorthand for --set=*.attest=type=sbom'
+    required: false
+  set:
+    description: 'List of targets values to override (eg. targetpattern.key=value)'
+    required: false
+  github-token:
+    description: 'API token used to authenticate to a Git repository for remote definitions'
+    default: ${{ github.token }}
+    required: false
+
+  # depot inputs
   build-platform:
     description: 'The platform to use for the build'
     required: false
@@ -16,9 +63,6 @@ inputs:
     description: 'Fallback to `docker buildx bake` if `depot bake` fails'
     required: false
     default: 'false'
-  files:
-    description: 'List of bake definition files'
-    required: false
   lint:
     description: 'Lint dockerfiles and fail build if any issues are at least the lint-fail-on severity'
     required: false
@@ -26,48 +70,16 @@ inputs:
   lint-fail-on:
     description: 'Severity of linter issue to cause the build to fail. (e.g., error, warn, info, none)'
     required: false
-  load:
-    description: 'Load is a shorthand for --set=*.output=type=docker'
-    required: false
-    default: 'false'
-  no-cache:
-    description: 'Do not use cache when building the image'
-    required: false
-    default: 'false'
   project:
     description: 'Depot project ID'
     required: false
-  provenance:
-    description: 'Provenance is a shorthand for --set=*.attest=type=provenance'
-    required: false
-  pull:
-    description: 'Always attempt to pull a newer version of the image'
-    required: false
-    default: 'false'
-  push:
-    description: 'Push is a shorthand for --set=*.output=type=registry'
-    required: false
-    default: 'false'
   save:
     description: 'Save the image to the Depot ephemeral registry'
     required: false
     default: 'false'
-  sbom:
-    description: 'SBOM is a shorthand for --set=*.attest=type=sbom'
-    required: false
   sbom-dir:
     description: 'Directory to output SBOMs for each built image'
-    required: false
-  set:
-    description: 'List of targets values to override (eg. targetpattern.key=value)'
-    required: false
-  targets:
-    description: 'List of bake targets'
     required: false
   token:
     description: 'Depot Token used to authenticate with the remote builder instance'
     required: false
-  workdir:
-    description: 'Working directory of bake execution'
-    required: false
-    default: '.'
