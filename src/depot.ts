@@ -31,6 +31,7 @@ export async function bake(inputs: Inputs) {
   const gitAuthToken = process.env.BUILDX_BAKE_GIT_AUTH_TOKEN ?? inputs.githubToken
   const targets = inputs.targets.length > 0 ? inputs.targets : ['default']
   const bakeArgs = [
+    ...(inputs.source ? [inputs.source] : []),
     ...flag('--file', inputs.files),
     ...flag('--no-cache', inputs.noCache),
     ...flag('--pull', inputs.pull),

@@ -1,8 +1,10 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import {Context} from '@docker/actions-toolkit/lib/context'
 import {Util} from '@docker/actions-toolkit/lib/util'
 import * as csv from 'csv-parse/sync'
 import * as fs from 'fs'
+import * as handlebars from 'handlebars'
 import * as os from 'os'
 import * as path from 'path'
 
@@ -45,7 +47,7 @@ export function getInputs(): Inputs {
     sbom: core.getInput('sbom'),
     sbomDir: core.getInput('sbom-dir'),
     set: Util.getInputList('set', {ignoreComma: true, quote: false}),
-    source: core.getInput('source'),
+    source: getSourceInput(),
     project: core.getInput('project'),
     token: core.getInput('token') || process.env.DEPOT_TOKEN,
     buildxFallback: core.getBooleanInput('buildx-fallback'),
@@ -122,4 +124,12 @@ export function resolveProvenanceAttrs(input: string): string {
 function provenanceBuilderID(): string {
   const serverURL = process.env.GITHUB_SERVER_URL || 'https://github.com'
   return `${serverURL}/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}`
+}
+
+function getSourceInput(): string {
+  const source = handlebars.compile(core.getInput('source'))({
+    defaultContext: Context.gitContext(),
+  })
+  if (source === '.') return ''
+  return source
 }
