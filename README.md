@@ -31,7 +31,7 @@ This action implements the same inputs and outputs as the [`docker/bake-action`]
 
 ### Authentication
 
-This action needs a Depot API token to communicate with your project's builders. You can supply this one of three ways. The third, using OICD, is the preferred method, but you can also supply a token directly.
+This action needs a Depot API token to communicate with your project's builders. You can supply this one of three ways. The third, using OIDC, is the preferred method, but you can also supply a token directly.
 
 1. You can supply a user or project API token via the `token` input:
 
