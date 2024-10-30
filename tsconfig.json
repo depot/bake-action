@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
+    "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true
   },
