@@ -5,7 +5,7 @@ import * as http from '@actions/http-client'
 import * as io from '@actions/io'
 import * as publicOIDC from '@depot/actions-public-oidc-client'
 import {Bake} from '@docker/actions-toolkit/lib/buildx/bake'
-import {Inputs as BuildxInputs} from '@docker/actions-toolkit/lib/buildx/inputs'
+import {Build} from '@docker/actions-toolkit/lib/buildx/build'
 import {Toolkit} from '@docker/actions-toolkit/lib/toolkit'
 import {execa} from 'execa'
 import * as fs from 'fs'
@@ -71,13 +71,21 @@ export async function bake(inputs: Inputs) {
   ]
 
   const toolkit = new Toolkit()
-  const bakedef = await toolkit.bake.parseDefinitions(
-    [...inputs.files, inputs.source],
-    inputs.targets,
-    inputs.set,
-    inputs.load,
-    inputs.push,
-    inputs.workdir,
+  const bakedef = await toolkit.buildxBake.getDefinition(
+    {
+      files: inputs.files,
+      load: inputs.load,
+      noCache: inputs.noCache,
+      overrides: inputs.set,
+      provenance: inputs.provenance,
+      push: inputs.push,
+      sbom: inputs.sbom,
+      source: inputs.source,
+      targets,
+    },
+    {
+      cwd: inputs.workdir,
+    },
   )
   if (inputs.provenance) {
     bakeArgs.push('--provenance', inputs.provenance)
@@ -88,10 +96,10 @@ export async function bake(inputs: Inputs) {
     if (github.context.payload.repository?.private ?? false) {
       // if this is a private repository, we set the default provenance
       // attributes being set in buildx: https://github.com/docker/buildx/blob/fb27e3f919dcbf614d7126b10c2bc2d0b1927eb6/build/build.go#L603
-      bakeArgs.push('--provenance', BuildxInputs.resolveProvenanceAttrs(`mode=min,inline-only=true`))
+      bakeArgs.push('--provenance', Build.resolveProvenanceAttrs(`mode=min,inline-only=true`))
     } else {
       // for a public repository, we set max provenance mode.
-      bakeArgs.push('--provenance', BuildxInputs.resolveProvenanceAttrs(`mode=max`))
+      bakeArgs.push('--provenance', Build.resolveProvenanceAttrs(`mode=max`))
     }
   }
 
