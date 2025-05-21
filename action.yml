@@ -52,6 +52,9 @@ inputs:
     description: 'Save the image to the Depot ephemeral registry'
     required: false
     default: 'false'
+  save-tag:
+    description: 'Additional custom tag for the saved image, use with --save'
+    required: false
   sbom:
     description: 'SBOM is a shorthand for --set=*.attest=type=sbom'
     required: false

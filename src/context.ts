@@ -18,6 +18,7 @@ export interface Inputs {
   provenance: string
   push: boolean
   save: boolean
+  saveTag?: string
   sbom: string
   sbomDir: string
   set: string[]
@@ -41,6 +42,7 @@ export function getInputs(): Inputs {
     provenance: getProvenanceInput(),
     push: core.getBooleanInput('push'),
     save: core.getBooleanInput('save'),
+    saveTag: core.getInput('save-tag'),
     sbom: core.getInput('sbom'),
     sbomDir: core.getInput('sbom-dir'),
     set: Util.getInputList('set', {ignoreComma: true, quote: false}),
