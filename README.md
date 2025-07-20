@@ -72,7 +72,7 @@ This action needs a Depot API token to communicate with your project's builders.
 
    ```yaml
    steps:
-     - uses: depot/build-push-action@v1
+     - uses: depot/bake-action@v1
        with:
          project: abc123xyz
    ```
