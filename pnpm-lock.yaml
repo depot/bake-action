@@ -36,12 +36,9 @@ importers:
         specifier: ^8.0.1
         version: 8.0.1
     devDependencies:
-      '@tsconfig/node16':
-        specifier: ^16.1.0
-        version: 16.1.3
-      '@tsconfig/node20':
-        specifier: ^20.1.4
-        version: 20.1.4
+      '@tsconfig/node24':
+        specifier: ^24.0.4
+        version: 24.0.4
       '@types/node':
         specifier: ~22.13.10
         version: 22.13.10
@@ -53,13 +50,13 @@ importers:
         version: 3.5.3
       prettier-plugin-organize-imports:
         specifier: ^4.1.0
-        version: 4.1.0(prettier@3.5.3)(typescript@5.8.2)
+        version: 4.1.0(prettier@3.5.3)(typescript@5.9.3)
       prettier-plugin-pkg:
         specifier: ^0.18.0
         version: 0.18.1(prettier@3.5.3)
       typescript:
-        specifier: ^5.1.6
-        version: 5.8.2
+        specifier: ^5.9.3
+        version: 5.9.3
 
 packages:
 
@@ -423,11 +420,8 @@ packages:
   '@protobuf-ts/runtime@2.9.5':
     resolution: {integrity: sha512-SsumigRe3IqNTCQvVZUqDQExsKF72eyAMiWlYb5Jwj3eU4z8UH7JLlSfb/Wjidz4b/chTN6zh5AXBSKl0Asm3A==}
 
-  '@tsconfig/node16@16.1.3':
-    resolution: {integrity: sha512-9nTOUBn+EMKO6rtSZJk+DcqsfgtlERGT9XPJ5PRj/HNENPCBY1yu/JEj5wT6GLtbCLBO2k46SeXDaY0pjMqypw==}
-
-  '@tsconfig/node20@20.1.4':
-    resolution: {integrity: sha512-sqgsT69YFeLWf5NtJ4Xq/xAF8p4ZQHlmGW74Nu2tD4+g5fAsposc4ZfaaPixVu4y01BEiDCWLRDCvDM5JOsRxg==}
+  '@tsconfig/node24@24.0.4':
+    resolution: {integrity: sha512-2A933l5P5oCbv6qSxHs7ckKwobs8BDAe9SJ/Xr2Hy+nDlwmLE1GhFh/g/vXGRZWgxBg9nX/5piDtHR9Dkw/XuA==}
 
   '@types/node@22.13.10':
     resolution: {integrity: sha512-I6LPUvlRH+O6VRUqYOcMudhaIdUVWfsjnZavnsraHvpBwaEyMN29ry+0UVJhImYL16xsscu0aske3yA+uPOWfw==}
@@ -1012,8 +1006,8 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
 
-  typescript@5.8.2:
-    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -1547,9 +1541,7 @@ snapshots:
 
   '@protobuf-ts/runtime@2.9.5': {}
 
-  '@tsconfig/node16@16.1.3': {}
-
-  '@tsconfig/node20@20.1.4': {}
+  '@tsconfig/node24@24.0.4': {}
 
   '@types/node@22.13.10':
     dependencies:
@@ -1994,10 +1986,10 @@ snapshots:
       duplexify: 3.7.1
       through2: 2.0.5
 
-  prettier-plugin-organize-imports@4.1.0(prettier@3.5.3)(typescript@5.8.2):
+  prettier-plugin-organize-imports@4.1.0(prettier@3.5.3)(typescript@5.9.3):
     dependencies:
       prettier: 3.5.3
-      typescript: 5.8.2
+      typescript: 5.9.3
 
   prettier-plugin-pkg@0.18.1(prettier@3.5.3):
     dependencies:
@@ -2134,7 +2126,7 @@ snapshots:
 
   typescript@3.9.10: {}
 
-  typescript@5.8.2: {}
+  typescript@5.9.3: {}
 
   uglify-js@3.19.3:
     optional: true
