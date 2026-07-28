@@ -119744,7 +119744,7 @@ function getInputs() {
     provenance: getProvenanceInput(),
     push: core.getBooleanInput("push"),
     save: core.getBooleanInput("save"),
-    saveTag: core.getInput("save-tag"),
+    saveTag: import_util.Util.getInputList("save-tag", { ignoreComma: true, quote: false }),
     sbom: core.getInput("sbom"),
     sbomDir: core.getInput("sbom-dir"),
     set: import_util.Util.getInputList("set", { ignoreComma: true, quote: false }),
@@ -121487,7 +121487,7 @@ async function bake(inputs) {
     ...flag("--lint", inputs.lint),
     ...flag("--lint-fail-on", inputs.lintFailOn),
     ...flag("--save", inputs.save),
-    ...flag("--save-tag", inputs.saveTag)
+    ...inputs.saveTag.flatMap((t) => flag("--save-tag", t))
   ];
   const args = [...bakeArgs, ...depotArgs, ...targets];
   let token = inputs.token ?? process.env.DEPOT_TOKEN;
